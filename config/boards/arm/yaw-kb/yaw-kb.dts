@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2023 The ZMK Contributors
+ * SPDX-License-Identifier: MIT
+ *
+ * This file is for a custom keyboard based on the HOLYIOT-18010-NRF52840 module.
+ * It features a 10x7 matrix, rotary encoder, I2C OLED, and battery monitoring.
+ */
+
+/dts-v1/;
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    model = "yaw-kb"; /* 你可以给你的键盘起个名字 */
+    compatible = "yaw-kb"; /* 一个唯一的兼容性字符串 */
+
+    chosen {
+        zephyr,code-partition = &code_partition;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zmk,kscan = &kscan0;
+        zmk,matrix_transform = &default_transform;
+        zephyr,console = &cdc_acm_uart;
+        zmk,battery = &vbatt;
+        zmk,encoder = &encoder;
+    };
+
+    /* 默认的键盘矩阵映射，直接对应物理位置 */
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <10>;
+        rows = <7>;
+        map = <
+        RC(4,0) RC(4,1) RC(4,2) RC(4,3) RC(4,4) RC(4,5)                  RC(5,5) RC(5,4) RC(5,3) RC(5,2) RC(5,1) RC(5,0)
+        RC(3,0) RC(3,1) RC(3,2) RC(3,3) RC(3,4) RC(3,5)                  RC(6,5) RC(6,4) RC(6,3) RC(6,2) RC(6,1) RC(6,0)
+        RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)      RC(2,6)     RC(7,5) RC(7,4) RC(7,3) RC(7,2) RC(7,1) RC(7,0)
+        RC(1,0) RC(1,1) RC(1,2) RC(1,3) RC(1,4) RC(1,5)                  RC(8,5) RC(8,4) RC(8,3) RC(8,2) RC(8,1) RC(8,0)
+        RC(0,4) RC(0,1) RC(0,2) RC(0,3) RC(0,4) RC(0,5) RC(0,6) RC(9,6)  RC(9,5) RC(9,4) RC(9,3) RC(9,2) RC(9,1) RC(9,0)
+        >;
+    };
+
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        label = "KSCAN";
+        diode-direction = "col2row"; // 电流从列流向行，二极管方向需匹配
+
+        /* 行定义 - 对应我们设计的右侧引脚 */
+        row-gpios
+            = <&gpio1 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW0: P1.10
+            , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW1: P1.11
+            , <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW2: P1.13
+            , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW3: P1.15
+            , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW4: P0.03
+            , <&gpio0  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW5: P0.02 // Mirror Row
+            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW6: P0.29
+            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW7: P0.29
+            , <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW8: P0.30
+            , <&gpio0  5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW9: P0.05
+            ;
+
+        /* 列定义 - 对应我们设计的左侧引脚 */
+        col-gpios
+            = <&gpio0 10 GPIO_ACTIVE_HIGH> // COL0: P0.10
+            , <&gpio0  9 GPIO_ACTIVE_HIGH> // COL1: P0.09
+            , <&gpio1  6 GPIO_ACTIVE_HIGH> // COL2: P1.06
+            , <&gpio1  4 GPIO_ACTIVE_HIGH> // COL3: P1.04
+            , <&gpio1  3 GPIO_ACTIVE_HIGH> // COL4: P1.03
+            , <&gpio1  0 GPIO_ACTIVE_HIGH> // COL5: P1.00
+            , <&gpio0 22 GPIO_ACTIVE_HIGH> // COL6: P0.22
+            ;
+    };
+
+    /* 旋转编码器定义 */
+    encoder: encoder_1 {
+        compatible = "alps,ec11";
+        label = "ENCODER_1";
+        a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder A: P1.01
+        b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder B: P1.02
+        steps = <2>; // EC11编码器通常每格有2个step
+        status = "okay";
+    };
+
+    /* 状态指示灯定义 */
+    leds {
+        compatible = "gpio-leds";
+        blue_led: led_0 {
+            gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>; // Blue LED on P0.07
+            label = "Blue LED";
+        };
+    };
+
+    /* 电池电压检测定义 */
+    vbatt: vbatt {
+        compatible = "zmk,battery-voltage-divider";
+        label = "BATTERY";
+        io-channels = <&adc 2>; // 使用 ADC channel 2, 对应 P0.04/AIN2
+        output-ohms = <2000000>; // 分压电阻中接地的电阻值 (R2 = 2MΩ)
+        full-ohms = <(2000000 + 820000)>; // 两个分压电阻的总阻值 (R1+R2, R1=820k, R2=2M)
+    };
+
+    /* 外部VCC控制引脚，用于控制OLED电源 */
+    vcc_control_gpios: vcc_control_gpios {
+        compatible = "gpio-keys";
+        vcc_control_pin: vcc_control_pin {
+            gpios = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; // VCC Control on P0.31
+            label = "VCC Control";
+        };
+    };
+};
+
+/* 启用必要的硬件模块 */
+&adc {
+    status = "okay";
+};
+
+&i2c0 {
+    compatible = "nordic,nrf-twi";
+    status = "okay";
+    sda-pin = <19>; // P0.19
+    scl-pin = <21>; // P0.21
+
+    /* OLED屏幕定义 */
+    oled: ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+        reg = <0x3c>; // OLED的I2C地址，通常是0x3C或0x3D
+        label = "DISPLAY";
+        width = <128>;
+        height = <32>; // 或 64, 取决于你的OLED型号
+        segment-offset = <0>;
+        page-offset = <0>;
+        display-offset = <0>;
+        multiplex-ratio = <31>; // 或 63
+        prechargep = <0x22>;
+        // vcc-gpios = <&vcc_control_gpios 0 GPIO_ACTIVE_HIGH>; // ZMK新版本中控制OLED电源的方式
+    };
+};
+
+&usbd {
+    status = "okay";
+    cdc_acm_uart: cdc_acm_uart {
+        compatible = "zephyr,cdc-acm-uart";
+        label = "CDC_ACM_0";
+    };
+};
+
+&flash0 {
+    /* Flash分区保持默认即可 */
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		sd_partition: partition@0 {
+			label = "softdevice";
+			reg = <0x00000000 0x00026000>;
+		};
+		code_partition: partition@26000 {
+			label = "code_partition";
+			reg = <0x00026000 0x000d6000>;
+		};
+		storage_partition: partition@fc000 {
+			label = "storage";
+			reg = <0x000fc000 0x00004000>;
+		};
+	};
+};

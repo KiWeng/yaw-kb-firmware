@@ -19,5 +19,4 @@
 #
 ---
 include:
-  - board: nrf52840dk_nrf52840
-    shield: reviung53
+  - board: yaw-kb
