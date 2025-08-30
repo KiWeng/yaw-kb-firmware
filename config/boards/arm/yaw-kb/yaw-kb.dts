@@ -113,6 +113,15 @@
     status = "okay";
 };
 
+/* 启用 GPIO 控制器 */
+&gpio0 {
+    status = "okay";
+};
+
+&gpio1 {
+    status = "okay";
+};
+
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
