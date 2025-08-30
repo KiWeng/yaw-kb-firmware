@@ -14,6 +14,15 @@ CONFIG_ARM_MPU=y
 # enable GPIO
 CONFIG_GPIO=y
 
+# 启用 Nordic nRFx GPIO 驱动
+CONFIG_GPIO_NRFX=y
+
+# 启用 Nordic nRFx P1 组 GPIO 支持 (关键！你的 ROW0, ROW1, ROW2, ROW3, Encoder A, Encoder B 都在 P1 上)
+CONFIG_GPIO_NRFX_P1=y 
+
+# Release P0.09 and P0.10 for GPIO use by disabling NFC
+CONFIG_NFCT_PINS_AS_GPIOS=y
+
 # Enable writing to flash
 CONFIG_USE_DT_CODE_PARTITION=y
 CONFIG_BUILD_OUTPUT_UF2=y
