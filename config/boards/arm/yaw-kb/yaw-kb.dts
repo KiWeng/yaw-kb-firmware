@@ -52,7 +52,7 @@
             , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW3: P1.15
             , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW4: P0.03
             , <&gpio0  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW5: P0.02 // Mirror Row
-            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW6: P0.29
+            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW6: P0.28
             , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW7: P0.29
             , <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW8: P0.30
             , <&gpio0  5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW9: P0.05
@@ -113,25 +113,41 @@
     status = "okay";
 };
 
+&pinctrl {
+    i2c0_default: i2c0_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 0, 21)>, // SCL on P0.21
+                    <NRF_PSEL(TWIM_SDA, 0, 19)>; // SDA on P0.19
+        };
+    };
+
+    i2c0_sleep: i2c0_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SCL, 0, 21)>,
+                    <NRF_PSEL(TWIM_SDA, 0, 19)>;
+            low-power-enable;
+        };
+    };
+};
+
 &i2c0 {
     compatible = "nordic,nrf-twi";
     status = "okay";
-    sda-pin = <19>; // P0.19
-    scl-pin = <21>; // P0.21
+    pinctrl-0 = <&i2c0_default>;
+    pinctrl-1 = <&i2c0_sleep>;
+    pinctrl-names = "default", "sleep";
 
-    /* OLED屏幕定义 */
     oled: ssd1306@3c {
         compatible = "solomon,ssd1306fb";
-        reg = <0x3c>; // OLED的I2C地址，通常是0x3C或0x3D
+        reg = <0x3c>;
         label = "DISPLAY";
         width = <128>;
-        height = <32>; // 或 64, 取决于你的OLED型号
+        height = <32>;
         segment-offset = <0>;
         page-offset = <0>;
         display-offset = <0>;
-        multiplex-ratio = <31>; // 或 63
+        multiplex-ratio = <31>;
         prechargep = <0x22>;
-        // vcc-gpios = <&vcc_control_gpios 0 GPIO_ACTIVE_HIGH>; // ZMK新版本中控制OLED电源的方式
     };
 };
 
@@ -144,7 +160,6 @@
 };
 
 &flash0 {
-    /* Flash分区保持默认即可 */
 	partitions {
 		compatible = "fixed-partitions";
 		#address-cells = <1>;
