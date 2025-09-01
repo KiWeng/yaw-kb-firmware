@@ -46,8 +46,8 @@
 
         /* 行定义 - 对应我们设计的右侧引脚 */
         row-gpios
-            , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW0: P1.10
-            = <&gpio1 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW1: P1.11
+            = <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW0: P1.10
+            , <&gpio1 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW1: P1.11
             , <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW2: P1.13
             , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW3: P1.15
             , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW4: P0.03
