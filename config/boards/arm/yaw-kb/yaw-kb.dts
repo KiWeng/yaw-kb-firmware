@@ -80,11 +80,16 @@
     /* 旋转编码器定义 */
     encoder: encoder_1 {
         compatible = "alps,ec11";
-        label = "ENCODER_1";
         a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder A: P1.01
         b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder B: P1.02
         steps = <80>;
         status = "okay";
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&encoder>;
+        triggers-per-rotation = <20>;
     };
 
     /* 状态指示灯定义 */
