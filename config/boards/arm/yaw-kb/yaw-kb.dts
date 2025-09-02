@@ -25,6 +25,13 @@
         zmk,encoder = &encoder;
     };
 
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&encoder_1>;
+        triggers-per-rotation = <20>;
+    };
+
+
     /* 默认的键盘矩阵映射，直接对应物理位置 */
     default_transform: keymap_transform_0 {
         compatible = "zmk,matrix-transform";
@@ -76,7 +83,7 @@
         label = "ENCODER_1";
         a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder A: P1.01
         b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder B: P1.02
-        steps = <2>; // EC11编码器通常每格有2个step
+        steps = <80>;
         status = "okay";
     };
 
