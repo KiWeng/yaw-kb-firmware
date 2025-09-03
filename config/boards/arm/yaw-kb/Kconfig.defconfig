@@ -29,6 +29,11 @@ config ZMK_USB
 	default y
 
 config ZMK_BATTERY_VOLTAGE_DIVIDER
-	default y
+
+config ZMK_POINTING
+    default y
+
+config I2C
+    default y
 
 endif # BOARD_CYBER60_REV_D

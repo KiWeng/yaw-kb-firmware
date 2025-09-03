@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  *
  * This file is for a custom keyboard based on the HOLYIOT-18010-NRF52840 module.
- * It features a 10x7 matrix, rotary encoder, I2C OLED, and battery monitoring.
+ * It features a 10x7 matrix, rotary encoder, I2C Cirque Trackpad, and battery monitoring.
  */
 
 /dts-v1/;
@@ -11,8 +11,8 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 
 / {
-    model = "yaw-kb"; /* 你可以给你的键盘起个名字 */
-    compatible = "yaw-kb"; /* 一个唯一的兼容性字符串 */
+    model = "yaw-kb";
+    compatible = "yaw-kb";
 
     chosen {
         zephyr,code-partition = &code_partition;
@@ -23,6 +23,7 @@
         zephyr,console = &cdc_acm_uart;
         zmk,battery = &vbatt;
         zmk,encoder = &encoder;
+        zmk,pointing_device = &trackpad;
     };
 
     /* 默认的键盘矩阵映射，直接对应物理位置 */
@@ -42,39 +43,37 @@
     kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
-        diode-direction = "col2row"; // 电流从列流向行，二极管方向需匹配
+        diode-direction = "col2row";
 
-        /* 行定义 - 对应我们设计的右侧引脚 */
         row-gpios
-            = <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW0: P1.10
-            , <&gpio1 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW1: P1.11
-            , <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW2: P1.13
-            , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW3: P1.15
-            , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW4: P0.03
-            , <&gpio0  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW5: P0.02 // Mirror Row
-            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW6: P0.28
-            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW7: P0.29
-            , <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW8: P0.30
-            , <&gpio0  5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  // ROW9: P0.05
+            = <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 15 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0  3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0  2 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 29 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0  5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
             ;
 
-        /* 列定义 - 对应我们设计的左侧引脚 */
         col-gpios
-            = <&gpio0 10 GPIO_ACTIVE_HIGH> // COL0: P0.10
-            , <&gpio0  9 GPIO_ACTIVE_HIGH> // COL1: P0.09
-            , <&gpio1  6 GPIO_ACTIVE_HIGH> // COL2: P1.06
-            , <&gpio1  4 GPIO_ACTIVE_HIGH> // COL3: P1.04
-            , <&gpio1  3 GPIO_ACTIVE_HIGH> // COL4: P1.03
-            , <&gpio1  0 GPIO_ACTIVE_HIGH> // COL5: P1.00
-            , <&gpio0 22 GPIO_ACTIVE_HIGH> // COL6: P0.22
+            = <&gpio0 10 GPIO_ACTIVE_HIGH>
+            , <&gpio0  9 GPIO_ACTIVE_HIGH>
+            , <&gpio1  6 GPIO_ACTIVE_HIGH>
+            , <&gpio1  4 GPIO_ACTIVE_HIGH>
+            , <&gpio1  3 GPIO_ACTIVE_HIGH>
+            , <&gpio1  0 GPIO_ACTIVE_HIGH>
+            , <&gpio0 22 GPIO_ACTIVE_HIGH>
             ;
     };
 
     /* 旋转编码器定义 */
     encoder: encoder_1 {
         compatible = "alps,ec11";
-        a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder A: P1.01
-        b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; // Encoder B: P1.02
+        a-gpios = <&gpio1 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        b-gpios = <&gpio1 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
         steps = <80>;
         status = "okay";
     };
@@ -85,29 +84,22 @@
         triggers-per-rotation = <20>;
     };
 
-    /* 状态指示灯定义 */
-    leds {
-        compatible = "gpio-leds";
-        blue_led: led_0 {
-            gpios = <&gpio0 7 GPIO_ACTIVE_HIGH>; // Blue LED on P0.07
-            label = "Blue LED";
-        };
-    };
+    /* --- 修改点 1: 移除了不再使用的 leds 定义 --- */
 
     /* 电池电压检测定义 */
     vbatt: vbatt {
         compatible = "zmk,battery-voltage-divider";
         label = "BATTERY";
-        io-channels = <&adc 2>; // 使用 ADC channel 2, 对应 P0.04/AIN2
-        output-ohms = <2000000>; // 分压电阻中接地的电阻值 (R2 = 2MΩ)
-        full-ohms = <(2000000 + 820000)>; // 两个分压电阻的总阻值 (R1+R2, R1=820k, R2=2M)
+        io-channels = <&adc 2>;
+        output-ohms = <2000000>;
+        full-ohms = <(2000000 + 820000)>;
     };
 
-    /* 外部VCC控制引脚，用于控制OLED电源 */
+    /* 外部VCC控制引脚，用于控制轨迹板电源 */
     vcc_control_gpios: vcc_control_gpios {
         compatible = "gpio-keys";
         vcc_control_pin: vcc_control_pin {
-            gpios = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; // VCC Control on P0.31
+            gpios = <&gpio0 31 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>;
             label = "VCC Control";
         };
     };
@@ -118,7 +110,6 @@
     status = "okay";
 };
 
-/* 启用 GPIO 控制器 */
 &gpio0 {
     status = "okay";
 };
@@ -130,15 +121,15 @@
 &pinctrl {
     i2c0_default: i2c0_default {
         group1 {
-            psels = <NRF_PSEL(TWIM_SCL, 0, 21)>, // SCL on P0.21
-                    <NRF_PSEL(TWIM_SDA, 0, 19)>; // SDA on P0.19
+            psels = <NRF_PSEL(TWIM_SCL, 0, 19)>, // SCL on P0.19
+                    <NRF_PSEL(TWIM_SDA, 0, 21)>; // SDA on P0.21
         };
     };
 
     i2c0_sleep: i2c0_sleep {
         group1 {
-            psels = <NRF_PSEL(TWIM_SCL, 0, 21)>,
-                    <NRF_PSEL(TWIM_SDA, 0, 19)>;
+            psels = <NRF_PSEL(TWIM_SCL, 0, 19)>,
+                    <NRF_PSEL(TWIM_SDA, 0, 21)>;
             low-power-enable;
         };
     };
@@ -151,17 +142,12 @@
     pinctrl-1 = <&i2c0_sleep>;
     pinctrl-names = "default", "sleep";
 
-    oled: ssd1306@3c {
-        compatible = "solomon,ssd1306fb";
-        reg = <0x3c>;
-        label = "DISPLAY";
-        width = <128>;
-        height = <32>;
-        segment-offset = <0>;
-        page-offset = <0>;
-        display-offset = <0>;
-        multiplex-ratio = <31>;
-        prechargep = <0x22>;
+    trackpad: trackpad@2a {
+        compatible = "cirque,pinnacle";
+        reg = <0x2a>;
+        label = "TRACKPAD";
+        /* --- 修改点 2: DR 引脚已正确更新为 P0.07 --- */
+        interrupt-gpios = <&gpio0 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
     };
 };
 
@@ -173,34 +159,29 @@
     };
 };
 
- &flash0 {
-     /*
-      * For more information, see:
-      * http://docs.zephyrproject.org/latest/devices/dts/flash_partitions.html
-      */
-     partitions {
-         compatible = "fixed-partitions";
-         #address-cells = <1>;
-         #size-cells = <1>;
- 
-         sd_partition: partition@0 {
-             label = "mbr";
-             reg = <0x00000000 0x00001000>;
-         };
-         code_partition: partition@1000 {
-             label = "code_partition";
-             reg = <0x00001000 0x000d3000>;
-         };
- 
-         storage_partition: partition@d4000 {
-             label = "storage";
-             reg = <0x000d4000 0x00020000>;
-         };
- 
-         boot_partition: partition@f4000 {
-             label = "adafruit_boot";
-             reg = <0x000f4000 0x0000c000>;
-         };
-     };
- };
- 
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        sd_partition: partition@0 {
+            label = "mbr";
+            reg = <0x00000000 0x00001000>;
+        };
+        code_partition: partition@1000 {
+            label = "code_partition";
+            reg = <0x00001000 0x000d3000>;
+        };
+
+        storage_partition: partition@d4000 {
+            label = "storage";
+            reg = <0x000d4000 0x00020000>;
+        };
+
+        boot_partition: partition@f4000 {
+            label = "adafruit_boot";
+            reg = <0x000f4000 0x0000c000>;
+        };
+    };
+};
