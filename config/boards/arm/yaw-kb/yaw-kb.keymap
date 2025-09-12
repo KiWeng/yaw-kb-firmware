@@ -25,7 +25,7 @@
         #sensor-binding-cells = <0>;
         bindings = <&msc MOVE_Y(200)>, <&msc MOVE_Y(-200)>;
 
-        tap-ms = <50>;
+        tap-ms = <200>;
     };
 
     keymap {
