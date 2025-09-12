@@ -25,7 +25,7 @@
         #sensor-binding-cells = <0>;
         bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
 
-        tap-ms = <300>;
+        tap-ms = <50>;
     };
 
     keymap {
@@ -46,9 +46,9 @@
             bindings = <
             &kp GRAVE    &kp N1        &kp N2   &kp N3    &kp N4    &kp N5                            &kp N6      &kp N7   &kp N8    &kp N9    &kp N0    &kp ESC
             &kp RBKT     &kp Q         &kp W    &kp E     &kp R     &kp T                             &kp Y       &kp U    &kp I     &kp O     &kp P     &kp LBKT
-            &kp TAB      &kp A         &kp S    &kp D     &kp F     &kp G         &kp C_MUTE          &kp H       &kp J    &kp K     &kp L     &kp SEMI  &kp SQT
+            &kp TAB      &kp A         &kp S    &kp D     &kp F     &kp G           &mkp MB3          &kp H       &kp J    &kp K     &kp L     &kp SEMI  &kp SQT
             &mt LGUI ESC &kp Z         &kp X    &kp C     &kp V     &kp B                             &kp N       &kp M    &kp COMMA &kp DOT   &kp FSLH  &kp BSLH
-            &mkp LCLK    &kp LC(SPACE) &kp LGUI &kp LALT  &kp LCTRL &kp LSHFT &lt 2 SPACE &lt 1 ENTER &kp BSPC    &kp RALT &kp RCTRL &kp RSHFT &kp LGUI  &mkp RCLK
+            &mkp MB1     &kp LC(SPACE) &kp LGUI &kp LALT  &kp LCTRL &kp LSHFT &lt 2 SPACE &lt 1 ENTER &kp BSPC    &kp RALT &kp RCTRL &kp RSHFT &kp LGUI  &mkp MB2
             >;
 
             /*
