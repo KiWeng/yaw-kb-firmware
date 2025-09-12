@@ -151,7 +151,7 @@
         /* --- 修改点 2: DR 引脚已正确更新为 P0.07 --- */
         dr-gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
 
-        sensitivity = "2x";
+        sensitivity = "3x";
         no-taps;
     };
 };
