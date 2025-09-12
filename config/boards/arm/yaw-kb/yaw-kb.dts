@@ -154,13 +154,6 @@
     };
 };
 
-/ {
-    trackpad_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackpad>;
-    };
-};
-
 &usbd {
     status = "okay";
     cdc_acm_uart: cdc_acm_uart {
