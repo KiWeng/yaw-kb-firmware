@@ -9,7 +9,6 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/outputs.h>
-#include <dt-bindings/zmk/input_transform.h>
 
 
 / {
@@ -121,13 +120,5 @@
             &trans       &trans       &trans       &trans       &trans       &trans    &trans   &trans    &trans             &trans            &trans          &trans &trans &trans
             >;
         };
-    };
-};
-
-/ {
-    trackpad_listener {
-        compatible = "zmk,input-listener";
-        device = <&trackpad>;
-        input-processors = <&zip_xy_transform (INPUT_TRANSFORM_Y_INVERT)>;
     };
 };
