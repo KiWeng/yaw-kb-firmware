@@ -75,7 +75,12 @@
             ;
     };
 
-    &layouts_position_map {
+
+    layouts_yaw_position_map: layouts_yaw_position_map {
+        compatible = "zmk,physical-layout-position-map";
+
+        complete;
+
         yaw_posmap: yaw_map {
             physical-layout = <&physical_layout0>;
             positions
