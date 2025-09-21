@@ -11,12 +11,14 @@
 #include <dt-bindings/zmk/matrix_transform.h>
 #include <input/processors.dtsi>
 #include <dt-bindings/zmk/input_transform.h>
+#include "yaw-kb-layout.dtsi"
 
 / {
     model = "yaw-kb";
     compatible = "yaw-kb";
 
     chosen {
+        zmk,physical-layout = &physical_layout0;
         zephyr,code-partition = &code_partition;
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;

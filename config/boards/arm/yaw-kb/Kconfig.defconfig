@@ -36,4 +36,7 @@ config ZMK_POINTING
 config I2C
     default y
 
-endif # BOARD_CYBER60_REV_D
+config ZMK_STUDIO
+    default y
+
+endif
