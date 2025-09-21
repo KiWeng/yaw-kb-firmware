@@ -23,7 +23,6 @@
         zephyr,sram = &sram0;
         zephyr,flash = &flash0;
         zmk,kscan = &kscan0;
-        zmk,matrix_transform = &default_transform;
         zephyr,console = &cdc_acm_uart;
         zmk,battery = &vbatt;
         zmk,encoder = &encoder;
