@@ -124,7 +124,7 @@
             &out OUT_TOG &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                 &rgb_ug RGB_TOG    &rgb_ug RGB_BRI   &rgb_ug RGB_BRD &trans &trans &trans
             &trans       &trans       &kp C_BRI_DN &kp C_BRI_UP &trans       &bt BT_CLR                   &rgb_ug RGB_EFF    &trans            &trans          &trans &trans &trans
             &kp CLCK     &kp C_POWER  &kp C_PREV   &kp C_NEXT   &trans       &studio_unlock  &trans       &trans             &trans            &trans          &trans &trans &trans
-            &trans       &kp PSCRN    &trans       &kp K_CMENU  &trans       &trans                       &trans             &trans            &trans          &trans &trans &trans
+            &trans       &kp PSCRN    &trans       &kp K_CMENU  &trans       &bootloader                  &trans             &trans            &trans          &trans &trans &trans
             &trans       &trans       &trans       &trans       &trans       &trans    &trans   &trans    &trans             &trans            &trans          &trans &trans &trans
             >;
         };
