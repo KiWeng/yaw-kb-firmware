@@ -37,3 +37,5 @@ CONFIG_FLASH_MAP=y
 
 # Enable ZMK Studio by default
 CONFIG_ZMK_STUDIO_LOCKING=n
+
+CONFIG_ZMK_SLEEP=y
