@@ -153,7 +153,8 @@
         dr-gpios = <&gpio0 7 (GPIO_ACTIVE_HIGH)>;
 
         sensitivity = "4x";
-        no-taps;
+        no_taps = false;
+        no_secondary_tap = false;
     };
 };
 
