@@ -24,8 +24,6 @@
         zephyr,flash = &flash0;
         zmk,kscan = &kscan0;
         zmk,battery = &vbatt;
-        zmk,encoder = &encoder;
-        zmk,pointing_device = &trackpad;
     };
 
     /* 默认的键盘矩阵映射，直接对应物理位置 */

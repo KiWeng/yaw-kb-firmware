@@ -1,5 +1,7 @@
-# Copyright (c) 2020 Stefan Sundin (4pplet)
+#
+# Copyright (c) 2023 The ZMK Contributors
 # SPDX-License-Identifier: MIT
+#
 
 if BOARD_YAW_KB
 
@@ -29,6 +31,7 @@ config ZMK_USB
 	default y
 
 config ZMK_BATTERY_VOLTAGE_DIVIDER
+	default y
 
 config ZMK_POINTING
     default y

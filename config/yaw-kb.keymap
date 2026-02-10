@@ -7,7 +7,6 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/rgb.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/pointing.h>
 
@@ -89,17 +88,17 @@
             //|-------+-----+------+------+------+------+------------------+------+-------+-------+-------+-------+-------|
             //| VOLDN |VOLUP| BRDN | BRUP | END  |      |                  | COPY | UNDO  |  INS  |       | PASTE |       |
             //|-------+-----+------+------+------+------+------------------+------+-------+-------+-------+-------+-------|
-            //| CAPS  |POWER| PREV | NEXT |      |      |      (trans)     | LEFT | DOWN  |  UP   | RIGHT |       |       |
+            //| CAPS  |POWER| PREV | NEXT |      |STUDIO|      (trans)     | LEFT | DOWN  |  UP   | RIGHT |       |       |
             //|-------+-----+------+------+------+------+------------------+------+-------+-------+-------+-------+-------|
-            //|       |PSCRN| DEL  | MENU |      |      |                  |      |       |       |       |       |       |
+            //|       |PSCRN| DEL  | MENU |      | BOOT |                  |      |       |       |       |       |       |
             //|-------+-----+------+------+------+------+------------------+------+-------+-------+-------+-------+-------|
             //|       |     |      |      |      |      |         |        |      |       |       |       |       |       |
             //`-----------------------------------------------------------------------------------------------------------'
             bindings = <
             &out OUT_TOG &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                 &trans    &trans    &trans    &trans    &kp HOME  &trans
             &kp C_VOL_DN &kp C_VOL_UP &kp C_BRI_DN &kp C_BRI_UP &kp END      &trans                       &kp LC(C) &kp LC(Z) &kp INS   &trans    &kp LC(V) &trans
-            &kp CLCK     &kp C_POWER  &kp C_PREV   &kp C_NEXT   &trans       &trans           &trans      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &trans    &trans
-            &trans       &kp PSCRN    &kp DEL      &kp K_CMENU  &trans       &trans                       &trans    &trans    &trans    &trans    &trans    &trans
+            &kp CLCK     &kp C_POWER  &kp C_PREV   &kp C_NEXT   &trans       &studio_unlock   &trans      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT &trans    &trans
+            &trans       &kp PSCRN    &kp DEL      &kp K_CMENU  &trans       &bootloader                  &trans    &trans    &trans    &trans    &trans    &trans
             &trans       &trans       &trans       &trans       &trans       &trans    &trans   &trans    &trans    &trans    &trans    &trans    &trans    &trans
             >;
 
@@ -110,22 +109,22 @@
 
         adjust { // Layer 3: Adjust层 (当 Layer 1 和 2 同时激活时)
             //,------------------------------------------------------------------------------------------------------------.
-            //| OUT   | BT0 | BT1  | BT2  | BT3  | BT4  |                  | RGB T | RGB + | RGB - |       |       |       |
+            //| OUT   | BT0 | BT1  | BT2  | BT3  | BT4  |                  |       |       |       |       |       |       |
             //|-------+-----+------+------+------+------+------------------+-------+-------+-------+-------+-------+-------|
-            //|       |     | BRDN | BRUP |      |BT CLR|                  |RGB EF+|       |       |       |       |       |
+            //|       |     | BRDN | BRUP |      |BT CLR|                  |       |       |       |       |       |       |
             //|-------+-----+------+------+------+------+------------------+-------+-------+-------+-------+-------+-------|
-            //| CAPS  |POWER| PREV | NEXT |      |      |      (trans)     |       |       |       |       |       |       |
+            //| CAPS  |POWER| PREV | NEXT |      |STUDIO|      (trans)     |       |       |       |       |       |       |
             //|-------+-----+------+------+------+------+------------------+-------+-------+-------+-------+-------+-------|
-            //|       |PSCRN|      | MENU |      |      |                  |       |       |       |       |       |       |
+            //|       |PSCRN|      | MENU |      | BOOT |                  |       |       |       |       |       |       |
             //|-------+-----+------+------+------+------+------------------+-------+-------+-------+-------+-------+-------|
             //|       |     |      |      |      |      |         |        |       |       |       |       |       |       |
             //`------------------------------------------------------------------------------------------------------------'
             bindings = <
-            &out OUT_TOG &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                 &rgb_ug RGB_TOG    &rgb_ug RGB_BRI   &rgb_ug RGB_BRD &trans &trans &trans
-            &trans       &trans       &kp C_BRI_DN &kp C_BRI_UP &trans       &bt BT_CLR                   &rgb_ug RGB_EFF    &trans            &trans          &trans &trans &trans
-            &kp CLCK     &kp C_POWER  &kp C_PREV   &kp C_NEXT   &trans       &trans          &trans       &trans             &trans            &trans          &trans &trans &trans
-            &trans       &kp PSCRN    &trans       &kp K_CMENU  &trans       &trans                       &trans             &trans            &trans          &trans &trans &trans
-            &trans       &trans       &trans       &trans       &trans       &trans    &trans   &trans    &trans             &trans            &trans          &trans &trans &trans
+            &out OUT_TOG &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                 &none              &none             &none           &none  &none  &none
+            &none        &none        &kp C_BRI_DN &kp C_BRI_UP &none        &bt BT_CLR                   &none              &none             &none           &none  &none  &none
+            &kp CLCK     &kp C_POWER  &kp C_PREV   &kp C_NEXT   &none        &studio_unlock  &trans       &none              &none             &none           &none  &none  &none
+            &none        &kp PSCRN    &none        &kp K_CMENU  &none        &bootloader                  &none              &none             &none           &none  &none  &none
+            &none        &none        &none        &none        &none        &none     &none    &none     &none              &none             &none           &none  &none  &none
             >;
         };
     };
